@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+received.jpg
+screenshot.png
+test.jpg
