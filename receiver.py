@@ -1,50 +1,35 @@
-import socket
-import cv2
-import numpy as np
+"""
+ScreenLink Receiver
 
-HOST = input("Enter transmitter IP: ")
-PORT = 9999
+Application entry point.
 
-client = socket.socket()
+Responsibilities:
+- Create the QApplication.
+- Create the main application window.
+- Start the Qt event loop.
 
-client.connect((HOST, PORT))
+All networking and display logic lives in other modules.
+"""
 
-print("Connected!")
+import sys
 
-while True:
+from PyQt6.QtWidgets import QApplication
 
-    size_data = client.recv(4)
+from gui.main_window import MainWindow
 
-    if not size_data:
-        break
 
-    size = int.from_bytes(
-        size_data,
-        "big"
-    )
+def main() -> None:
+    """
+    Start the ScreenLink Receiver application.
+    """
 
-    data = b""
+    app = QApplication(sys.argv)
 
-    while len(data) < size:
+    window = MainWindow()
+    window.show()
 
-        packet = client.recv(4096)
+    sys.exit(app.exec())
 
-        if not packet:
-            break
 
-        data += packet
-
-    frame = cv2.imdecode(
-        np.frombuffer(data, np.uint8),
-        cv2.IMREAD_COLOR
-    )
-
-    cv2.imshow("ScreenLink", frame)
-
-    if cv2.waitKey(1) & 0xFF == 27:
-        break
-
-    if cv2.waitKey(1) == 27:
-        break
-
-cv2.destroyAllWindows()
+if __name__ == "__main__":
+    main()

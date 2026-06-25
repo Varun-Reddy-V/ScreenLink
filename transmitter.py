@@ -44,8 +44,11 @@ def main():
     client_socket, client_address = server.accept()
 
     print(f"Connected: {client_address}")
+    f_n = 0
     while True:
         frame = capture_screen()
+
+        f_n += 1
 
         print("Screenshot captured")
 
@@ -59,7 +62,7 @@ def main():
         client_socket.sendall(header)
         client_socket.sendall(jpeg_data)
 
-        print("Frame sent")
+        print(f"Frame {f_n} sent")
         time.sleep(3)
 
     client_socket.close()
